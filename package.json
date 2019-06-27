@@ -2,11 +2,6 @@
   "name": "example-create-react-app-express",
   "version": "1.0.0",
   "description": "Example on using create-react-app with a Node Express Backend",
-  "author": {
-    "name": "Esau Silva",
-    "twitter": "@_esausilva",
-    "url": "https://esausilva.com"
-  },
   "license": "MIT",
   "scripts": {
     "client": "cd client && yarn start",
@@ -25,10 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/esausilva/example-create-react-app-express.git"
-  },
-  "bugs": {
-    "url": "https://github.com/esausilva/example-create-react-app-express/issues"
+    "url": "https://github.com/ghostproducer/Yobetit-test"
   },
   "keywords": [
     "node",
