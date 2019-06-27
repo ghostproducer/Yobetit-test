@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const request = require('request');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -11,6 +12,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // API calls
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From Express' });
+
+
+  // Making Request to Rest Countries API
+  request('https://restcountries.eu/rest/v2/name/brazil', function (error, response, body) {
+    console.log('error:', error); // Print the error if one occurred
+    console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+    console.log('body:', body); // Print the reponse of the request
+  });
 });
 
 app.post('/api/world', (req, res) => {
