@@ -32,7 +32,54 @@ app.post('/api/world', (req, res) => {
     );
 });
 
-// Question 4
+if (process.env.NODE_ENV === 'production') {
+    // Serve any static files
+    app.use(express.static(path.join(__dirname, 'client/build')));
+
+    // Handle React routing, return all requests to React app
+    app.get('*', function (req, res) {
+        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    });
+}
+
+app.listen(port, () => console.log(`Listening on port ${port}`));
+
+// Question 1 - Write a function that connects to​ ​ https://restcountries.eu/​ and gets a unique country from a
+// specific name given using the Node back end and send it to the front end.
+
+function getUniqueCountry (country) {
+    request('https://restcountries.eu/rest/v2/name/' + country + '?fullText=true', function (error, response, body) {
+        console.log('error:', error); // Print the error if one occurred
+        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        console.log('body:', body); // Print the response of the request
+    });
+}
+
+// Question 2 - Using the same API (​ ​ https://restcountries.eu/​ ), and from an array of string, write a function
+// that returns a list of countries where their name matches at least a part of one of these string
+// use the Node back end and send it to the front end.
+
+function getListCountry (array) {
+    request('https://restcountries.eu/rest/v2/name/' + array , function (error, response, body) {
+        console.log('error:', error); // Print the error if one occurred
+        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        console.log('body:', body); // Print the response of the request
+    });
+}
+
+// Question 3 - Using the same API (​ ​ https://restcountries.eu/​ ) in the React front end list all the countries
+// and a field to filter the country by name.
+
+function getAllCountry () {
+    request('https://restcountries.eu/rest/v2/all', function (error, response, body) {
+        console.log('error:', error); // Print the error if one occurred
+        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        console.log('body:', body); // Print the response of the request
+    });
+}
+
+// Question 4 - Using these data, create a function that, when it’s called by the front end, gives back the
+// result of a spin and show the result.
 
 const reel1 = ['cherry', 'lemon', 'apple', 'lemon', 'banana', 'banana', 'lemon', 'lemon'];
 const reel2 = ['lemon', 'apple', 'lemon', 'lemon', 'cherry', 'apple', 'banana', 'lemon'];
@@ -69,18 +116,3 @@ function runMachine() {
         coins = coins + 3;
     }
 }
-
-
-
-
-if (process.env.NODE_ENV === 'production') {
-    // Serve any static files
-    app.use(express.static(path.join(__dirname, 'client/build')));
-
-    // Handle React routing, return all requests to React app
-    app.get('*', function (req, res) {
-        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-    });
-}
-
-app.listen(port, () => console.log(`Listening on port ${port}`));
