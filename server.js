@@ -9,18 +9,22 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+
+
 // API calls
 app.get('/api/hello', (req, res) => {
     res.send({express: 'Hello From Express'});
 
 
     // Making Request to Rest Countries API
-    request('https://restcountries.eu/rest/v2/name/brazil', function (error, response, body) {
+    /*request('https://restcountries.eu/rest/v2/name/brazil', function (error, response, body) {
         console.log('error:', error); // Print the error if one occurred
         console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         console.log('body:', body); // Print the reponse of the request
-    });
+    });*/
 });
+
+
 
 app.post('/api/world', (req, res) => {
     console.log(req.body);
@@ -31,6 +35,63 @@ app.post('/api/world', (req, res) => {
         `I received your POST request. This is what you sent me: ${req.body.post}`,
     );
 });
+
+app.post('/api/uniqueCountry', async (req, res) => {
+
+
+        console.log("-----------------------------------/api/uniqueCountry----------------------------");
+        await request("https://restcountries.eu/rest/v2/name/" + req.body.post, function(error, response, body) {
+            res.json(body);
+        });
+
+
+
+    /*console.log('req.body from api/uniqueCountry = ', req.body);
+    let payload = request('https://restcountries.eu/rest/v2/name/' + req.body + '?fullText=true', async function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(body);
+            await res.send(body);
+        }
+
+    });
+
+
+    console.log ('payload = ', payload);
+    // Testing function 4
+    runMachine();
+    res.send(
+        `You request the selected country: ${req.body.post} . Payload = ` + payload,
+    );*/
+});
+
+app.post('/api/listCountry', async (req, res) => {
+
+
+    console.log("-----------------------------------/api/uniqueCountry'----------------------------");
+
+
+    await request('https://restcountries.eu/rest/v2/name/' + req.body.post , function (error, response, body) {
+        console.log('error:', error); // Print the error if one occurred
+        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        console.log('body:', body); // Print the response of the request
+        res.json(body);
+    });
+});
+
+app.post('/api/allCountry', async (req, res) => {
+
+
+    console.log("-----------------------------------/api/uniqueCountry'----------------------------");
+
+
+    await request('https://restcountries.eu/rest/v2/all' , function (error, response, body) {
+        console.log('error:', error); // Print the error if one occurred
+        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        console.log('body:', body); // Print the response of the request
+        res.json(body);
+    });
+});
+
 
 if (process.env.NODE_ENV === 'production') {
     // Serve any static files
@@ -48,10 +109,12 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 // specific name given using the Node back end and send it to the front end.
 
 function getUniqueCountry (country) {
+        console.log ('--------------------getUniqueCountry-----------------------------')
     request('https://restcountries.eu/rest/v2/name/' + country + '?fullText=true', function (error, response, body) {
         console.log('error:', error); // Print the error if one occurred
         console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         console.log('body:', body); // Print the response of the request
+        return (body);
     });
 }
 
@@ -81,38 +144,68 @@ function getAllCountry () {
 // Question 4 - Using these data, create a function that, when it’s called by the front end, gives back the
 // result of a spin and show the result.
 
-const reel1 = ['cherry', 'lemon', 'apple', 'lemon', 'banana', 'banana', 'lemon', 'lemon'];
-const reel2 = ['lemon', 'apple', 'lemon', 'lemon', 'cherry', 'apple', 'banana', 'lemon'];
-const reel3 = ['lemon', 'apple', 'lemon', 'apple', 'cherry', 'lemon', 'banana', 'lemon'];
-let coins = 20;
 
-function runMachine() {
-    coins = coins - 1;
+app.post('/api/runMachine', async (req, res) => {
 
-    let result1 = reel1[Math.floor(Math.random()*reel1.length)];
-    let result2 = reel2[Math.floor(Math.random()*reel2.length)];
-    let result3 = reel3[Math.floor(Math.random()*reel3.length)];
 
-    if (result1 === 'cherry' && result2 === 'cherry' && result3 === 'cherry' ) {
-        console.log('You won 50 coins!');
-        coins = coins + 50;
-    } else if ((result1 === 'cherry' && result2 === 'cherry') || (result1 === 'cherry' && result3 === 'cherry' ) || (result2 === 'cherry' && result3 === 'cherry' )) {
-        console.log('You won 40 coins!');
-        coins = coins + 40;
-    } else if (result1 === 'apple' && result2 === 'apple' && result3 === 'apple') {
-        console.log('You won 20 coins!');
-        coins = coins + 20;
-    } else if ((result1 === 'apple' && result2 === 'apple') || (result1 === 'apple' && result3 === 'apple' ) || (result2 === 'apple' && result3 === 'apple' )) {
-        console.log('You won 10 coins!');
-        coins = coins + 10;
-    } else if (result1 === 'banana' && result2 === 'banana' && result3 === 'banana' ) {
-        console.log('You won 15 coins!');
-        coins = coins + 15;
-    } else if ((result1 === 'banana' && result2 === 'banana') || (result1 === 'banana' && result3 === 'banana' ) || (result2 === 'banana' && result3 === 'banana' )) {
-        console.log('You won 5 coins!');
-        coins = coins + 5;
-    } else if (result1 === 'lemon' && result2 === 'lemon' && result3 === 'lemon' ) {
-        console.log('You won 3 coins!');
-        coins = coins + 3;
+    const reel1 = ['cherry', 'lemon', 'apple', 'lemon', 'banana', 'banana', 'lemon', 'lemon'];
+    const reel2 = ['lemon', 'apple', 'lemon', 'lemon', 'cherry', 'apple', 'banana', 'lemon'];
+    const reel3 = ['lemon', 'apple', 'lemon', 'apple', 'cherry', 'lemon', 'banana', 'lemon'];
+    let coins = 20;
+
+    function runMachine() {
+        let result = '';
+        coins = coins - 1;
+
+        let result1 = reel1[Math.floor(Math.random()*reel1.length)];
+        let result2 = reel2[Math.floor(Math.random()*reel2.length)];
+        let result3 = reel3[Math.floor(Math.random()*reel3.length)];
+
+        if (result1 === 'cherry' && result2 === 'cherry' && result3 === 'cherry' ) {
+            console.log('You won 50 coins!');
+            result = 'You won 50 coins!';
+            coins = coins + 50;
+        } else if ((result1 === 'cherry' && result2 === 'cherry') || (result1 === 'cherry' && result3 === 'cherry' ) || (result2 === 'cherry' && result3 === 'cherry' )) {
+            console.log('You won 40 coins!');
+            result = 'You won 40 coins!';
+            coins = coins + 40;
+        } else if (result1 === 'apple' && result2 === 'apple' && result3 === 'apple') {
+            console.log('You won 20 coins!');
+            result = 'You won 40 coins!';
+            coins = coins + 20;
+        } else if ((result1 === 'apple' && result2 === 'apple') || (result1 === 'apple' && result3 === 'apple' ) || (result2 === 'apple' && result3 === 'apple' )) {
+            console.log('You won 10 coins!');
+            result = 'You won 40 coins!';
+            coins = coins + 10;
+        } else if (result1 === 'banana' && result2 === 'banana' && result3 === 'banana' ) {
+            console.log('You won 15 coins!');
+            result = 'You won 40 coins!';
+            coins = coins + 15;
+        } else if ((result1 === 'banana' && result2 === 'banana') || (result1 === 'banana' && result3 === 'banana' ) || (result2 === 'banana' && result3 === 'banana' )) {
+            console.log('You won 5 coins!');
+            result = 'You won 40 coins!';
+            coins = coins + 5;
+        } else if (result1 === 'lemon' && result2 === 'lemon' && result3 === 'lemon' ) {
+            console.log('You won 3 coins!');
+            result = 'You won 40 coins!';
+            coins = coins + 3;
+        } else {
+            console.log('Bad luck day, you didn\'t win anything :(');
+            result = 'You won 40 coins!';
+        }
+
+        const spin = {
+            coins: coins,
+            result: result
+        };
+
+
+        res.json(spin);
     }
-}
+
+
+    runMachine();
+
+});
+
+
