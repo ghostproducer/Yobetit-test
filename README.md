@@ -1,7 +1,7 @@
 # Yobetit-test
 This is the main repository of my proposed solution to the FullStack Position.
-You can check the online solution deployed to Heroku [on this link].(https://yobetit-fullstack-test.herokuapp.com/)
-This project was bootstrapped with [Create React App].(https://github.com/facebook/create-react-app).
+You can check the online solution deployed to Heroku [on this link](https://yobetit-fullstack-test.herokuapp.com/).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app)..
 
 ## Running Locally
 
